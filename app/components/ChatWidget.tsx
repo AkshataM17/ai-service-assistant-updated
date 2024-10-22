@@ -8,10 +8,7 @@ interface Message {
 }
 
 export default function ChatWidget() {
-  const [messages, setMessages] = useState<Message[]>([{
-    content: "Welcome! Please provide some initial information or FAQs that I can use to help future customers.",
-    isUser: false
-  }]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -22,6 +19,39 @@ export default function ChatWidget() {
   };
 
   useEffect(scrollToBottom, [messages]);
+
+  // Fetch knowledge base status on component mount
+  useEffect(() => {
+    const checkKnowledgeBase = async () => {
+      try {
+        const response = await fetch('/api/knowledge-base');
+        const data = await response.json();
+
+        if (data.knowledgeBase && data.knowledgeBase !== 'Knowledge base not initialized.') {
+          // Knowledge base is initialized
+          setIsInitialized(true);
+          setMessages([{
+            content: "Thank you! I've saved this information and I'm ready to help customers.",
+            isUser: false
+          }]);
+        } else {
+          // Knowledge base is not initialized, prompt user for initial setup
+          setMessages([{
+            content: "Welcome! Please provide some initial information or FAQs that I can use to help future customers.",
+            isUser: false
+          }]);
+        }
+      } catch (error) {
+        console.error('Error checking knowledge base:', error);
+        setMessages([{
+          content: "Sorry, there was an error checking the knowledge base.",
+          isUser: false
+        }]);
+      }
+    };
+
+    checkKnowledgeBase();
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim()) return;
