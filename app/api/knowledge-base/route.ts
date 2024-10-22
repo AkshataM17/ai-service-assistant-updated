@@ -5,7 +5,7 @@ import path from 'path';
 
 const knowledgeBaseFilePath = path.join(process.cwd(), 'knowledgeBase.txt');
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const knowledgeBase = fs.readFileSync(knowledgeBaseFilePath, 'utf8');
     return NextResponse.json({ 
