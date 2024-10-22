@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { message, isInitialSetup } = body;
 
-    let knowledgeBase = loadKnowledgeBase();
+    const knowledgeBase = loadKnowledgeBase();
 
     if (!isInitialized) {
       if (isInitialSetup) {
