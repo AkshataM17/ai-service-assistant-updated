@@ -8,9 +8,15 @@ const knowledgeBaseFilePath = path.join(process.cwd(), 'knowledgeBase.txt');
 export async function GET(request: NextRequest) {
   try {
     const knowledgeBase = fs.readFileSync(knowledgeBaseFilePath, 'utf8');
-    return NextResponse.json({ success: true, knowledgeBase: knowledgeBase || 'Knowledge base not initialized.' });
+    return NextResponse.json({ 
+      success: true, 
+      knowledgeBase: knowledgeBase || 'Knowledge base not initialized.' 
+    });
   } catch (error) {
     console.error('Error reading knowledge base:', error);
-    return NextResponse.json({ success: false, message: 'An error occurred while accessing the knowledge base.' }, { status: 500 });
+    return NextResponse.json({ 
+      success: false, 
+      message: 'An error occurred while accessing the knowledge base.' 
+    }, { status: 500 });
   }
 }
