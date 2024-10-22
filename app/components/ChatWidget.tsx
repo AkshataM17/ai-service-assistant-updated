@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { saveMessage } from '../utils/saveMessage'; // Import saveMessage function
 
 interface Message {
   content: string;
@@ -26,43 +27,67 @@ export default function ChatWidget() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-
+  
     const userMessage = { content: input, isUser: true };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
-
+  
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: input,
-          isInitialSetup: !isInitialized
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (!isInitialized && data.success) {
-        setIsInitialized(true);
-        setMessages(prev => [...prev, {
-          content: "Thank you! I've saved this information and I'm ready to help customers.",
-          isUser: false
-        }]);
+      let response;
+      if (!isInitialized) {
+        // Send first message to initialize the knowledge base
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: input,
+            isInitialSetup: true,
+          }),
+        });
       } else {
-        setMessages(prev => [...prev, {
-          content: data.message,
-          isUser: false
-        }]);
+        // Send subsequent user messages for normal chat responses
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: input,
+            isInitialSetup: false,
+          }),
+        });
+      }
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        setIsInitialized(true);
+        setMessages(prev => [
+          ...prev,
+          {
+            content: "Thank you! I've saved this information and I'm ready to help customers.",
+            isUser: false,
+          },
+        ]);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            content: data.message,
+            isUser: false,
+          },
+        ]);
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      setMessages(prev => [...prev, {
-        content: "Sorry, there was an error processing your message.",
-        isUser: false
-      }]);
+      setMessages(prev => [
+        ...prev,
+        {
+          content: "Sorry, there was an error processing your message.",
+          isUser: false,
+        },
+      ]);
     }
   };
+  
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
