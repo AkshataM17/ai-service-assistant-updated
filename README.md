@@ -75,6 +75,8 @@ npm run dev
 You should now see the AI customer service agent application running with Next.js.
 
 ## Screenshots
+![Screenshot 1](https://github.com/AkshataM17/ai-service-assistant-updated/blob/main/public/Screenshot%20(118).png?raw=true)
+![Screenshot 2](https://github.com/AkshataM17/ai-service-assistant-updated/blob/main/public/Screenshot%20(117).png?raw=true)
 
 ## How to use the application
 - If you are the owner of website, first provide initial data about your platform
