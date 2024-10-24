@@ -24,7 +24,7 @@ AI Customer service is an application where users can interact with a service ag
 
 ## Features
 
-- AI Powered CSS customer service agent
+- AI Powered customer service agent
 - Provide data only once and it answers the queries
 - Easy to use UI interface
 
@@ -47,7 +47,7 @@ AI Customer service is an application where users can interact with a service ag
 
 ```bash
 git clone
-cd code-styler
+cd ai-service-assistant
 ```
 
 **2. Install dependencies:**
@@ -77,6 +77,8 @@ You should now see the AI customer service agent application running with Next.j
 ## Screenshots
 
 ## How to use the application
+- If you are the owner of website, first provide initial data about your platform
+- Now, you and the users can ask any questions through chat interface
 
 ## Contributing
 
